@@ -18,7 +18,7 @@ public class AccountServiceImpl implements IAccountService {
     private AccountMapper accountMapper;
 
     @Override
-    public Account getInfo() {
-        return accountMapper.selectByPrimaryKey(1L);
+    public Account getInfo(Long id) {
+        return accountMapper.selectByPrimaryKey(id);
     }
 }

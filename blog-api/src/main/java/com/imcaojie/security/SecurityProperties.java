@@ -6,4 +6,5 @@ package com.imcaojie.security;
  * @description
  **/
 public class SecurityProperties {
+
 }

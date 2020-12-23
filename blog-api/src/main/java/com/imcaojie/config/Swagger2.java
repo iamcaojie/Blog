@@ -35,7 +35,7 @@ public class Swagger2 {
                 .title("blog")
                 .contact(new Contact("caojie",
                         "https://www.imcaojie.com",
-                        "@imcaojie.com"))
+                        "10804842@qq.com"))
                 .description("Api文档")
                 .version("1.0.1")
                 .termsOfServiceUrl("https://www.imcaojie.com")

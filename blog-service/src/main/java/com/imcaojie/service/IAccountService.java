@@ -9,6 +9,6 @@ import com.imcaojie.pojo.Account;
  **/
 public interface IAccountService {
 
-    public Account getInfo();
+    public Account getInfo(Long id);
 
 }

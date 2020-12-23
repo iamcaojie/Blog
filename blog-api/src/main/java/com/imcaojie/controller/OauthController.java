@@ -6,4 +6,5 @@ package com.imcaojie.controller;
  * @description
  **/
 public class OauthController {
+
 }
