@@ -1,7 +1,6 @@
 package com.imcaojie.pojo;
 
 import lombok.Data;
-
 import java.util.Date;
 
 @Data
@@ -14,9 +13,13 @@ public class Account {
 
     private String unionId;
 
-    private Date createdAt;
+    private Integer isDeleted;
 
-    private Date updatedAt;
+    private Integer status;
+
+    private Date createdTime;
+
+    private Date updatedTime;
 
     public Long getId() {
         return id;
@@ -50,19 +53,35 @@ public class Account {
         this.unionId = unionId == null ? null : unionId.trim();
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public Integer getIsDeleted() {
+        return isDeleted;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setIsDeleted(Integer isDeleted) {
+        this.isDeleted = isDeleted;
     }
 
-    public Date getUpdatedAt() {
-        return updatedAt;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public Date getUpdatedTime() {
+        return updatedTime;
+    }
+
+    public void setUpdatedTime(Date updatedTime) {
+        this.updatedTime = updatedTime;
     }
 }

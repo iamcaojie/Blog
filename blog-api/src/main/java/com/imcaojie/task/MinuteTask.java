@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * @description
  **/
 
-@Component
+//@Component
 public class MinuteTask {
 
     @Scheduled(cron = "0/3 * * * * ?")

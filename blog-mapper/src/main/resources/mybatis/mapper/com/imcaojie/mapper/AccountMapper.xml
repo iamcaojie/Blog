@@ -6,12 +6,86 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="phone" property="phone" jdbcType="INTEGER" />
     <result column="union_id" property="unionId" jdbcType="VARCHAR" />
-    <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
-    <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+    <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
   </resultMap>
-  <sql id="Base_Column_List" >
-    id, name, phone, union_id, created_at, updated_at
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
   </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, name, phone, union_id, is_deleted, status, created_time, updated_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.imcaojie.pojo.AccountExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from account
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
@@ -22,13 +96,19 @@
     delete from account
     where id = #{id,jdbcType=BIGINT}
   </delete>
+  <delete id="deleteByExample" parameterType="com.imcaojie.pojo.AccountExample" >
+    delete from account
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
   <insert id="insert" parameterType="com.imcaojie.pojo.Account" >
     insert into account (id, name, phone, 
-      union_id, created_at, updated_at
-      )
+      union_id, is_deleted, status, 
+      created_time, updated_time)
     values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{phone,jdbcType=INTEGER}, 
-      #{unionId,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}
-      )
+      #{unionId,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.imcaojie.pojo.Account" >
     insert into account
@@ -45,11 +125,17 @@
       <if test="unionId != null" >
         union_id,
       </if>
-      <if test="createdAt != null" >
-        created_at,
+      <if test="isDeleted != null" >
+        is_deleted,
       </if>
-      <if test="updatedAt != null" >
-        updated_at,
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="updatedTime != null" >
+        updated_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -65,14 +151,72 @@
       <if test="unionId != null" >
         #{unionId,jdbcType=VARCHAR},
       </if>
-      <if test="createdAt != null" >
-        #{createdAt,jdbcType=TIMESTAMP},
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=TINYINT},
       </if>
-      <if test="updatedAt != null" >
-        #{updatedAt,jdbcType=TIMESTAMP},
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        #{updatedTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
+  <select id="countByExample" parameterType="com.imcaojie.pojo.AccountExample" resultType="java.lang.Integer" >
+    select count(*) from account
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update account
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phone != null" >
+        phone = #{record.phone,jdbcType=INTEGER},
+      </if>
+      <if test="record.unionId != null" >
+        union_id = #{record.unionId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDeleted != null" >
+        is_deleted = #{record.isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.createdTime != null" >
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedTime != null" >
+        updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update account
+    set id = #{record.id,jdbcType=BIGINT},
+      name = #{record.name,jdbcType=VARCHAR},
+      phone = #{record.phone,jdbcType=INTEGER},
+      union_id = #{record.unionId,jdbcType=VARCHAR},
+      is_deleted = #{record.isDeleted,jdbcType=TINYINT},
+      status = #{record.status,jdbcType=TINYINT},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{record.updatedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.imcaojie.pojo.Account" >
     update account
     <set >
@@ -85,11 +229,17 @@
       <if test="unionId != null" >
         union_id = #{unionId,jdbcType=VARCHAR},
       </if>
-      <if test="createdAt != null" >
-        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
       </if>
-      <if test="updatedAt != null" >
-        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -99,8 +249,10 @@
     set name = #{name,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=INTEGER},
       union_id = #{unionId,jdbcType=VARCHAR},
-      created_at = #{createdAt,jdbcType=TIMESTAMP},
-      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
